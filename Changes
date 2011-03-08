@@ -1,0 +1,74 @@
+Revision history for Perl distribution PDF::Template
+
+0.29_02 Fri Oct 28 2005
+    - Fixed several bugs as documented in t/bug_0001.t and t/bug_0002.t.
+      - Bugs reported by flitman (Thank you!)
+    - IO::Scalar is now required to build PDF::Template
+
+0.29_01 Wed Oct 26 2005
+    - Merge Autrijus's changes so that PDF::Template now targets PDF::Writer
+    instead of directly targeting pdflib_pl
+
+0.25 Mon Jun 6 12:17 2005
+    - Fixed error in looping.  PDF::Template now correctly loops during begin_page and end_page calls.
+
+0.24 Mon Jun 6 12:05 2005
+    - Fixed conditional testing to correspond to the behavior of HTML::Template 
+   	It now correctly handles undefined variables.
+    
+0.23 Mon Jun 6 11:38:00 2005
+    - Set 72pts/inch (which is correct)
+    - Fixed textbox alignment problem.
+
+0.22 Tue Jan 11 11:00:00 2005
+    - Added tests to demonstrate bug submitted by Brian T. Wightman
+    - Fixed bug in conditionals submitted by Brian T. Wightman
+      - Conditionals now correctly handle string comparisons
+
+0.21 Mon Dec 06 10:30:00 2004
+    - Fixed tests to run under Perl 5.6.2 (do wasn't working correctly)
+
+0.20 Thu Dec 02 10:30:00 2004
+    - Fixed tests so that they run correctly
+    - Fixed Makefile.PL to generate Unicode-question correctly
+
+0.18 Thu Apr 08 07:30:00 2004
+    - Fixed bug regarding empty arrays as loop variables
+
+0.17 Wed Mar 17 12:00:00 2003
+    - Fixed bug introduced in 0.16 (loop parameters weren't case-insensitive)
+
+0.16 Wed Mar 17 12:00:00 2003
+    - Parameter names are now case-insensitive
+
+0.15 Tue Mar 16 12:00:00 2003
+    - Fixed bug w/using the same image in more than one <image> tag
+
+0.13 Tue Jan 20 12:30:00 2003
+    - Fixed bug IMAGE tag (caused by ..::Font::begin_page() not calling SUPER)
+    - Added Base to allow for external entities to be referenced by filename
+      without hard-coding the directory name.
+
+0.12 Tue Dec 19 11:30:00 2003
+    - Fixed bug with HEADERs not appearing when landscape is set
+
+0.12 Tue Dec 16 09:30:00 2003
+    - Fixed bug with HEADERs not appearing where appropriate when
+      PAGE_SIZE option is chosen.
+
+0.11 Fri Dec 07 17:00:00 2003
+    - Makefile.PL has two changes:
+        - <> => <STDIN>
+        - 5.8+ will now not ask you about Unicode support.
+    - PDF::Template::Factory::register() now works correctly
+    - All nodes are now documented (still need to document helper classes)
+    - WEBLINK will now work with parameterized X1/X2/Y1/Y2
+
+    Thanks to Nathan Byrd for pointing out and providing patches for two bugs.
+
+0.10 Fri Nov 30 17:00:00 2003
+    - Wholescale changes to the underlying structure
+    - Addition of a concept of scope, allowing for relative positioning
+    - Support for CJK fonts
+    - Maintenance fixes
+    - Turnover of maintenance from David Ferrance to Rob Kinyon
