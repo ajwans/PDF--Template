@@ -31,6 +31,7 @@ BEGIN {
     'TEXTBOX'     => 'PDF::Template::Element::TextBox',
     'VAR'         => 'PDF::Template::Element::Var',
     'WEBLINK'     => 'PDF::Template::Element::Weblink',
+	'POS'		  => 'PDF::Template::Element::Pos',
 
 # These are the helper objects
 
@@ -68,6 +69,7 @@ BEGIN {
     TEXTBOX
     VAR
     WEBLINK
+	POS
 );
 
 sub register
