@@ -112,6 +112,8 @@ sub render
 
     $self->set_color($context, 'COLOR', 'both', 1);
 
+	$context->{Y} = $y - $self->{TEMP_H};
+
     return 1;
 }
 
