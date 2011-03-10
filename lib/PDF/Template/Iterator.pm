@@ -73,6 +73,7 @@ sub enter_scope
     {
         $x->{uc $_} = delete $x->{$_} for keys %$x;
     }
+	$self->{DATA}[$self->{INDEX}]->{__INDEX__} = $self->{INDEX};
     push @{$self->{CONTEXT}{PARAM_MAP}}, $self->{DATA}[$self->{INDEX}];
 
     return 1;

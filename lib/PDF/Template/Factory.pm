@@ -123,7 +123,7 @@ sub create
     eval {
         require "$filename.pm";
     }; if ($@) {
-        die "Cannot find or compile PM file for '$name' ($filename)\n";
+        die "Cannot find or compile PM file for '$name' ($filename): $@\n";
     }
 
     return $Manifest{$name}->new(@_);

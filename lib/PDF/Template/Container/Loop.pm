@@ -81,8 +81,8 @@ sub render
 
     $iterator->enter_scope;
 
-    while ($iterator->can_continue)
-    {
+	while ($iterator->can_continue)
+	{
         $iterator->next;
 
         unless ($self->iterate_over_children($context))
@@ -92,7 +92,7 @@ sub render
         }
 
         $self->reset;
-    }
+	}
 
     $iterator->exit_scope;
 
