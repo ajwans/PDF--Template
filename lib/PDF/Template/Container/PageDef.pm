@@ -112,12 +112,14 @@ sub begin_page
     my $self = shift;
     my ($context) = @_;
 
+    $context->reset_pagebreak;
+
+    my $rc =  $self->SUPER::begin_page($context);
+
     $context->{X} = 0;
     $context->{Y} = $context->get($self, 'START_Y');
 
-    $context->reset_pagebreak;
-
-    return $self->SUPER::begin_page($context);
+	return $rc;
 }
 
 sub render
