@@ -36,7 +36,14 @@ sub render
         $txt = 'undefined';
     }
 
-    $context->{PDF}->add_bookmark($txt, 0, 0);
+	my $opts = $self->{PARENT} ?
+					'parent=' . $context->{BOOKMARKS}->{$self->{PARENT}} : '';
+
+    my $bookmark_id = $context->{PDF}->add_bookmark($txt, $opts, 0);
+
+	if ($self->{NAME}) {
+		$context->{BOOKMARKS}->{$self->{NAME}} = $bookmark_id;
+	}
 
     return 1;
 }
