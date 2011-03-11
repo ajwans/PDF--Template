@@ -31,9 +31,9 @@ sub _do_page
     my $self=shift;
     my ($context) = @_;
     return 0 unless $self->should_render($context);
-    unless ($self->{ITERATOR} && $self->{ITERATOR}->more_params)
-    { $self->{ITERATOR} = $self->make_iterator($context); }
-    my $iterator = $self->{ITERATOR};
+    unless ($self->{PAGE_ITERATOR} && $self->{PAGE_ITERATOR}->more_params)
+    { $self->{PAGE_ITERATOR} = $self->make_iterator($context); }
+    my $iterator = $self->{PAGE_ITERATOR};
     $iterator->enter_scope;
     while ($iterator->can_continue)
     {
