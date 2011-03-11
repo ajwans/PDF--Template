@@ -138,7 +138,13 @@ sub more_space
 
     return 0 if $self->{NO_PARAMS};
 
-    return 1 if $self->{CONTEXT}->get($self, 'Y') >= $self->{CONTEXT}->get($self, 'Y2');
+	if ($self->{CONTEXT}->get($self, 'Y') > $self->{CONTEXT}->get($self, 'Y2'))
+	{
+		return 1;
+	}
+
+	warn "no more space Y,Y2 = " . $self->{CONTEXT}->get($self, 'Y') . ',' .
+				$self->{CONTEXT}->get($self, 'Y2') if $self->{CONTEXT}->{DEBUG};
 
     return 0;
 }

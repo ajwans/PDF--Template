@@ -14,6 +14,13 @@ sub render
     my $self = shift;
     my ($context) = @_;
 
+	if (!$self->should_render($context)) {
+		warn "not rendering " . ref($self) . "\n";
+		warn "\tbecause has rendered\n" if $self->{__THIS_HAS_RENDERED__};
+		warn "\tbecause context\n" if !$context->should_render($self);
+		return 0;
+	}
+
     return 0 unless $self->should_render($context);
 
     return 1 if $context->{CALC_LAST_PAGE};

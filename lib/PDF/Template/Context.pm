@@ -1,6 +1,7 @@
 package PDF::Template::Context;
 
 use strict;
+use Carp qw/cluck/;
 
 BEGIN {
     use vars qw(@ISA);
@@ -215,6 +216,11 @@ sub should_render {
 
     # The objects for which this would be bad are going to bypass this check as they
     # see fit. All other objects should not render if the pagebreak has been tripped.
+	if ($self->pagebreak_tripped()) {
+		warn "not rendering " . ref($obj) . " because pagebreak tripped\n"
+			if ($self->{DEBUG});
+		return 0;
+	}
     return 0 if $self->pagebreak_tripped;
 
     return $self->check_end_of_page($obj);
@@ -230,6 +236,12 @@ sub check_end_of_page {
         ($self->get($obj, 'Y') || 0) + ($deltas->{Y} || 0)
             < ($self->get($obj, 'END_Y') || 0)
     ) {
+		if ($self->{DEBUG}) {
+			warn "not rendering because after rendering Y would be = " .
+				($self->get($obj, 'Y') + $deltas->{Y}) . " and END Y = " .
+				$self->get($obj, 'END_Y');
+		}
+
         $self->trip_pagebreak;
         return 0;
     }
@@ -251,7 +263,16 @@ sub new_page_def {
     $self->{PARAM_MAP}[0]{__PAGEDEF_PAGE__} = 1;
 }
 
-sub trip_pagebreak       { $_[0]{PB_TRIP} = 1 }
+sub trip_pagebreak       
+{
+	my ($self) = @_;
+
+	if (!$self->{PB_TRIP}) {
+		cluck 'trip_pagebreak X,Y = ' . $self->{X} . ',' . $self->{Y};
+	}
+
+	$self->{PB_TRIP} = 1;
+}
 sub reset_pagebreak      { $_[0]{PB_TRIP} = 0 }
 sub pagebreak_tripped    { $_[0]{PB_TRIP} = $_[1] if defined $_[1]; $_[0]{PB_TRIP} }
 sub store_font           { $_[0]{FONTS}{$_[1]} ||= $_[2] }

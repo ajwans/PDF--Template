@@ -91,6 +91,8 @@ sub render
 
     return 1 unless $self->conditional_passes($context);
 
+	warn "rendering 'if' " . $self->{NAME};
+	warn "onto page " . $context->{PARAM_MAP}->[0]->{__PAGE__};
     return $self->iterate_over_children($context);
 }
 

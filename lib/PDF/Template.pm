@@ -214,8 +214,9 @@ sub _prepare_output {
         Y => 0,
 
         # Other variables
-        PDF       => $p,
-        PARAM_MAP => [ $self->{PARAM_MAP} ],
+        PDF			=> $p,
+        PARAM_MAP	=> [ $self->{PARAM_MAP} ],
+		DEBUG		=> $self->{DEBUG},
 
         PDF_VERSION     => $self->{PDF_VERSION},
         DIE_ON_NO_PARAM => $self->{DIE_ON_NO_PARAM},
