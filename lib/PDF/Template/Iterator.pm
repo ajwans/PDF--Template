@@ -146,6 +146,7 @@ sub more_space
 	warn "no more space Y,Y2 = " . $self->{CONTEXT}->get($self, 'Y') . ',' .
 				$self->{CONTEXT}->get($self, 'Y2') if $self->{CONTEXT}->{DEBUG};
 
+	$self->{CONTEXT}->trip_pagebreak();
     return 0;
 }
 

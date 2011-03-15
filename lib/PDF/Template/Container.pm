@@ -108,7 +108,7 @@ sub iterate_over_children
 
         $e->exit_scope($context);
 
-		last if !$continue;
+		last if (!$continue && $context->pagebreak_tripped());
     }
 
 	if ($context->{DEBUG}) {
