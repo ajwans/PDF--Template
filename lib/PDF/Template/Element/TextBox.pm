@@ -192,7 +192,7 @@ sub _show_boxed
     }
 
     my $num_lines = int($h / $font_size);
-    my $chars_per_line = int($w / $font_size);
+    my $chars_per_line = int($w / $font_size) * 2;
 
     my $right = $x + $w;
     my $mid    = int(($x + $right) / 2);
