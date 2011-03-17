@@ -63,6 +63,11 @@ sub render
     my $x = $context->get($self, 'X');
     my $y = $context->get($self, 'Y');
     my $w = $context->get($self, 'W');
+
+	# if W is not specified then use the remaining space on the page
+	$w //= $context->get($self, 'PAGE_WIDTH') -
+									$context->get($self, 'RIGHT_MARGIN') - $x;
+
     my $h = $context->get($self, 'H');
 
     my $align = $context->get($self, 'ALIGN') ||
@@ -122,8 +127,13 @@ sub deltas
     my $self = shift;
     my ($context) = @_;
 
+	my $x	= $context->get($self, 'X');
+	my $dx	= $context->get($self, 'W') ||
+									$context->get($self, 'PAGE_WIDTH') - $x -
+									$context->get($self, 'RIGHT_MARGIN');
+
     return {
-        X => $context->get($self, 'W'),
+        X => $dx,
         Y => 0,
     };
 }

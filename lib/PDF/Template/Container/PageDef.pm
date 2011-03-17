@@ -116,7 +116,7 @@ sub begin_page
 
     my $rc =  $self->SUPER::begin_page($context);
 
-    $context->{X} = 0;
+    $context->{X} = $self->{LEFT_MARGIN};
     $context->{Y} = $context->get($self, 'START_Y');
 
 	return $rc;
