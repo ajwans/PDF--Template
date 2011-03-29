@@ -9,6 +9,16 @@ BEGIN {
     use PDF::Template::Element;
 }
 
+sub new
+{
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    $self->{TXTOBJ} = PDF::Template::Factory->create('TEXTOBJECT');
+
+    return $self;
+}
+
 sub render
 {
     my $self = shift;
@@ -26,11 +36,17 @@ sub render
         return 1;
     }
 
+    my $txt = $self->{TXTOBJ}->resolve($context);
+
     my @dimensions = map {
         $context->get($self, $_) || 0
     } qw( X1 Y1 X2 Y2 );
 
-    $context->{PDF}->add_weblink( @dimensions, $url );
+	my $x = $context->get($self, 'X') || $context->{X};
+	my $y = $context->get($self, 'Y') || $context->{Y};
+
+	my ($x2, $y2) = $context->{PDF}->show_xy($txt, $x, $y);
+    $context->{PDF}->add_weblink( $x, $y, $x2, $y2, $url);
 
     return 1;
 }
