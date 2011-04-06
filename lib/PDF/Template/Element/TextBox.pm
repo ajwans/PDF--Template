@@ -92,11 +92,19 @@ sub render
 
     my $txt = $self->get_text($context);
 
+	if ($context->{DEBUG}) {
+		warn "putting text '$txt' at X,Y,W,H => $x,$y,$w,$h\n";
+	}
+
     $self->{TEMP_H} = $self->show_boxed(
         $context, $txt,
         $x, $y, $w, $h,
         $align, '',
     );
+
+	if ($context->{DEBUG}) {
+		warn "calc h " . $self->{TEMP_H} . "\n";
+	}
 
     if ($context->get($self, 'BGCOLOR'))
     {

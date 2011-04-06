@@ -1,6 +1,7 @@
 package PDF::Template::Element::Image;
 
 use strict;
+use List::Util qw/min/;
 
 BEGIN {
     use vars qw(@ISA);

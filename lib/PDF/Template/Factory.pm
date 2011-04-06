@@ -27,11 +27,11 @@ BEGIN {
     'HR'          => 'PDF::Template::Element::HorizontalRule',
     'IMAGE'       => 'PDF::Template::Element::Image',
     'PAGEBREAK'   => 'PDF::Template::Element::PageBreak',
+	'POS'		  => 'PDF::Template::Element::Pos',
     'LINE'        => 'PDF::Template::Element::Line',
     'TEXTBOX'     => 'PDF::Template::Element::TextBox',
     'VAR'         => 'PDF::Template::Element::Var',
     'WEBLINK'     => 'PDF::Template::Element::Weblink',
-	'POS'		  => 'PDF::Template::Element::Pos',
 
 # These are the helper objects
 
@@ -45,6 +45,7 @@ BEGIN {
     'ELEMENT'    => 'PDF::Template::Element',
 
     'BASE'       => 'PDF::Template::Base',
+	'DEBUG'		 => 'PDF::Template::Container::Debug',
 );
 
 %isBuildable = map { $_ => 1 } qw(
@@ -52,6 +53,7 @@ BEGIN {
     BOOKMARK
     CIRCLE
     CONDITIONAL
+	DEBUG
     FONT
     FOOTER
     HEADER
@@ -63,13 +65,13 @@ BEGIN {
     PAGEBREAK
     PAGEDEF
     PDFTEMPLATE
+	POS
     ROW
     SCOPE
     SECTION
     TEXTBOX
     VAR
     WEBLINK
-	POS
 );
 
 sub register

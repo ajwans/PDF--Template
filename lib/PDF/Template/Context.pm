@@ -267,7 +267,7 @@ sub trip_pagebreak
 {
 	my ($self) = @_;
 
-	if (!$self->{PB_TRIP}) {
+	if (!$self->{PB_TRIP} && $self->{DEBUG}) {
 		cluck 'trip_pagebreak X,Y = ' . $self->{X} . ',' . $self->{Y};
 	}
 
