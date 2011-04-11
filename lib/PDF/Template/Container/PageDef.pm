@@ -129,7 +129,8 @@ sub render
 
     my ($header_h, $footer_h) = $self->find_margin_heights($context);
 
-    my ($pheight, $pwidth) = map { $context->get($self, $_) } qw(PAGE_HEIGHT PAGE_WIDTH);
+    my ($pheight, $pwidth) = map { $context->get($self, $_) }
+													qw(PAGE_HEIGHT PAGE_WIDTH);
 
     $self->{START_Y} = $pheight - $header_h;
     $self->{END_Y}   = $footer_h;
