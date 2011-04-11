@@ -140,13 +140,13 @@ sub render
     my $done = 0;
     while (!$done)
     {
-        $self->begin_page($context);
         $context->{PDF}->begin_page($pwidth, $pheight);
+        $self->begin_page($context);
 
         $done = $self->iterate_over_children($context);
 
-        $context->{PDF}->end_page;
         $self->end_page($context);
+        $context->{PDF}->end_page;
 
         $context->increment_pagenumber unless $context->get($self, 'NOPAGENUMBER');
     }
