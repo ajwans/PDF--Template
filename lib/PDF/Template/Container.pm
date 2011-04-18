@@ -78,28 +78,21 @@ sub iterate_over_children
 
     my $continue = 1;
 
-	if ($context->{DEBUG}) {
-		warn "rendering " . ref($self) . " at " . $context->{X} . ", " .
-			$context->{Y} . "\n";
-		warn "rendered items\n\t" . join("\n\t", map { ref($_) }
-					grep { $_->has_rendered() } @{$self->{ELEMENTS}}) . "\n";
-		warn "unrendered items\n\t" . join("\n\t", map { ref($_) }
-					grep { !$_->has_rendered() } @{$self->{ELEMENTS}}) . "\n";
-	}
+	warn "\t" x $context->{LEVEL} .
+			"rendering $self->{_NAME} at $context->{X},$context->{Y}\n"
+		if ($context->{DEBUG});
+
+	$context->{LEVEL}++;
 
     for my $e (grep !$_->has_rendered, @{$self->{ELEMENTS}})
     {
         $e->enter_scope($context);
 
         my $rc;
-		warn "\trendering " . ref($e) . " at " . $context->{X} . ", " .
-			$context->{Y} . "\n" if $context->{DEBUG};
         if ($rc = $e->render($context))
         {
-			warn "\trendered " . ref($e) . "\n" if $context->{DEBUG};
             $e->mark_as_rendered;
         }
-		warn "\tresult $rc\n" if $context->{DEBUG};
         $continue = $rc if $continue;
 
         $e->exit_scope($context);
@@ -107,9 +100,10 @@ sub iterate_over_children
 		last if (!$continue && $context->pagebreak_tripped());
     }
 
-	if ($context->{DEBUG}) {
-		warn "rendered /" . ref($self) . " result $continue\n";
-	}
+	$context->{LEVEL}--;
+
+	warn "\t" x $context->{LEVEL} . "rendered /" . ref($self) .
+		" result $continue\n" if ($context->{DEBUG});
 
     return $continue;
 }

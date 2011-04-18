@@ -116,8 +116,10 @@ sub resolve
 
 sub render
 {
-#    my $self = shift;
-#    my ($context) = @_;
+    my $self = shift;
+    my ($context) = @_;
+
+	warn "\t\tXrendering $self->{NAME}" if $context->{DEBUG};
 
     return 1;
 }

@@ -5,19 +5,10 @@ use warnings;
 
 use base 'PDF::Template::Element';
 
-sub render
+sub _render
 {
     my $self = shift;
     my ($context) = @_;
-
-	if (!$self->should_render($context)) {
-		warn "not rendering " . ref($self) . "\n";
-		warn "\tbecause has rendered\n" if $self->{__THIS_HAS_RENDERED__};
-		warn "\tbecause context\n" if !$context->should_render($self);
-		return 0;
-	}
-
-    return 0 unless $self->should_render($context);
 
     return 1 if $context->{CALC_LAST_PAGE};
 
@@ -27,6 +18,9 @@ sub render
     $self->set_color($context, 'COLOR', 'both');
 
     my $vals = $self->make_vals($context);
+
+	warn(sprintf("rendering line %d,%d -> %d,%d", @{$vals}{qw/X1 Y1 X2 Y2/}))
+		if $context->{DEBUG};
 
     my $width = $context->get($self, 'WIDTH') || 1;
 
