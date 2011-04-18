@@ -129,7 +129,8 @@ sub create
         die "Cannot find or compile PM file for '$name' ($filename): $@\n";
     }
 
-    return $Manifest{$name}->new(@_);
+    my $node = $Manifest{$name}->new(tag => $name, @_);
+	return $node;
 }
 
 sub create_node
