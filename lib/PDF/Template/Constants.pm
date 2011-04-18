@@ -1,6 +1,7 @@
 package PDF::Template::Constants;
 
 use strict;
+use warnings;
 
 BEGIN {
     use Exporter ();

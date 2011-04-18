@@ -3,13 +3,9 @@ package PDF::Template::Container::Conditional;
 #GGG Convert <conditional> to be a special case of <switch>?
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Container);
-
-    use PDF::Template::Container;
-}
+use base 'PDF::Template::Container';
 
 my %isOp = (
     '='  => '==',

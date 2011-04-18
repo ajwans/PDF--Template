@@ -1,13 +1,9 @@
 package PDF::Template::Element::HorizontalRule;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Element::Line);
-
-    use PDF::Template::Element::Line;
-}
+use base 'PDF::Template::Element';
 
 sub deltas
 {

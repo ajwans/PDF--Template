@@ -1,6 +1,7 @@
 package PDF::Template::Factory;
 
 use strict;
+use warnings;
 
 BEGIN {
     use vars qw(%Manifest %isBuildable);

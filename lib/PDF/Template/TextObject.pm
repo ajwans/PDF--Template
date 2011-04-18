@@ -1,15 +1,11 @@
 package PDF::Template::TextObject;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Base);
+use base 'PDF::Template::Base';
 
-    use PDF::Template::Base;
-
-    use Encode;
-}
+use Encode;
 
 # This is a helper object. It is not instantiated by the user,
 # nor does it represent an XML object. Rather, certain elements,

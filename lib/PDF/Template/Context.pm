@@ -1,16 +1,13 @@
 package PDF::Template::Context;
 
 use strict;
+use warnings;
+
+use base 'PDF::Template::Base';
+
+use PDF::Template::Constants qw( %PointsPer );
+
 use Carp qw/cluck/;
-
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Base);
-
-    use PDF::Template::Base;
-
-    use PDF::Template::Constants qw( %PointsPer );
-}
 
 # This is a helper object.    It is not instantiated by the user,
 # nor does it represent an XML object.    Rather, every container

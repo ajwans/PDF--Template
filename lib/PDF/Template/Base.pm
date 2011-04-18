@@ -1,6 +1,7 @@
 package PDF::Template::Base;
 
 use strict;
+use warnings;
 
 BEGIN {
 }

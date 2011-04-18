@@ -1,13 +1,9 @@
 package PDF::Template::Container::Section;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Container);
-
-    use PDF::Template::Container;
-}
+use base 'PDF::Template::Container';
 
 # Sections are used to keep text together and not allow page-breaking
 # within this branch of the tree, if possible.

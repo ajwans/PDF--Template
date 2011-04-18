@@ -1,13 +1,9 @@
 package PDF::Template::Element::Circle;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Element);
-
-    use PDF::Template::Element;
-}
+use base 'PDF::Template::Element';
 
 sub new
 {

@@ -1,13 +1,9 @@
 package PDF::Template::Container::Margin;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Container::Always);
-
-    use PDF::Template::Container::Always;
-}
+use base 'PDF::Template::Container::Always';
 
 # This is the common parent for <header> and <footer>. It exists so that
 # common code can be factored out. The code here is used for redefining

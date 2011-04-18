@@ -1,13 +1,9 @@
 package PDF::Template::Container;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Base);
-
-    use PDF::Template::Base;
-}
+use base 'PDF::Template::Base';
 
 # Containers are objects that can contain arbitrary elements, such as
 # PageDefs or Loops.

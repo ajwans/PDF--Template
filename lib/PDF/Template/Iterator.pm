@@ -1,13 +1,9 @@
 package PDF::Template::Iterator;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Base);
-
-    use PDF::Template::Base;
-}
+use base 'PDF::Template::Base';
 
 sub new
 {

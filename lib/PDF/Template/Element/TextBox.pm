@@ -1,14 +1,11 @@
 package PDF::Template::Element::TextBox;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Element);
+use base 'PDF::Template::Element';
 
-    use PDF::Template::Element;
-    use Encode;
-}
+use Encode;
 
 sub new
 {

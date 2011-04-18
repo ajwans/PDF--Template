@@ -1,14 +1,11 @@
 package PDF::Template::Element::Image;
 
 use strict;
+use warnings;
+
+use base 'PDF::Template::Element';
+
 use List::Util qw/min/;
-
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Element);
-
-    use PDF::Template::Element;
-}
 
 sub new
 {

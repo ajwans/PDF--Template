@@ -1,14 +1,10 @@
 package PDF::Template::Container::PageDef;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Container);
+use base 'PDF::Template::Container';
 
-    use PDF::Template::Container;
-
-}
 use PDF::Template::Constants qw( %Verify );
 
 sub new

@@ -1,13 +1,11 @@
 package PDF::Template::Element;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Base);
+use 5.10.0;
 
-    use PDF::Template::Base;
-}
+use base 'PDF::Template::Base';
 
 sub set_color
 {

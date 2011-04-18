@@ -1,13 +1,9 @@
 package PDF::Template::Container::Header;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Container::Margin);
-
-    use PDF::Template::Container::Margin;
-}
+use base 'PDF::Template::Container::Margin';
 
 sub enter_scope
 {

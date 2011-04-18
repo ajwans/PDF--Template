@@ -1,13 +1,9 @@
 package PDF::Template::Container::Scope;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Container);
-
-    use PDF::Template::Container;
-}
+use base 'PDF::Template::Container';
 
 # This is used as a placeholder for scoping values across any number
 # of children. It does nothing on its own.

@@ -1,13 +1,9 @@
 package PDF::Template::Element::Var;
 
 use strict;
+use warnings;
 
-BEGIN {
-    use vars qw(@ISA);
-    @ISA = qw(PDF::Template::Element);
-
-    use PDF::Template::Element;
-}
+use base 'PDF::Template::Element';
 
 sub resolve { ($_[1])->param($_[0]{NAME}) }
 
