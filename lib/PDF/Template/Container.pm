@@ -78,8 +78,8 @@ sub iterate_over_children
 
     my $continue = 1;
 
-	warn "\t" x $context->{LEVEL} .
-			"rendering $self->{_NAME} at $context->{X},$context->{Y}\n"
+	warn ' ' x $context->{LEVEL} .
+			"rendering container $self->{TAG} at $context->{X},$context->{Y}\n"
 		if ($context->{DEBUG});
 
 	$context->{LEVEL}++;
@@ -102,7 +102,7 @@ sub iterate_over_children
 
 	$context->{LEVEL}--;
 
-	warn "\t" x $context->{LEVEL} . "rendered /" . ref($self) .
+	warn ' ' x $context->{LEVEL} . 'rendered container /' . $self->{TAG} .
 		" result $continue\n" if ($context->{DEBUG});
 
     return $continue;

@@ -89,9 +89,9 @@ sub _render
 
     my $txt = $self->get_text($context);
 
-	if ($context->{DEBUG}) {
-		warn "putting text '$txt' at X,Y,W,H => $x,$y,$w,$h\n";
-	}
+	warn ' ' x $context->{LEVEL} .
+				"putting text '$txt' at X,Y,W,H => $x,$y,$w,$h\n"
+		if ($context->{DEBUG});
 
     $self->{TEMP_H} = $self->show_boxed(
         $context, $txt,
@@ -100,7 +100,7 @@ sub _render
     );
 
 	if ($context->{DEBUG}) {
-		warn "calc h " . $self->{TEMP_H} . "\n";
+		warn ' ' x $context->{LEVEL} . "calc h " . $self->{TEMP_H} . "\n";
 	}
 
     if ($context->get($self, 'BGCOLOR'))
@@ -116,6 +116,7 @@ sub _render
 
     if ($context->get($self, 'BORDER'))
     {
+
         $context->{PDF}->rect($orig_x, $y - $self->{TEMP_H} + $h, $orig_w, $self->{TEMP_H});
         $context->{PDF}->stroke;
     }

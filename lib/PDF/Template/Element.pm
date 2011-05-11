@@ -77,13 +77,13 @@ sub prerender
 	}
 
 	# save for later in case this element should not move the cursor
-	map { $self->{'OLD_' . $_} = $_ } qw/X Y/;
+	@{$self}{qw/OLD_X OLD_Y/} = ($X, $Y);
 
     my $p = $context->{PDF};
 	$p->move($X, $Y);
 	@{$context}{qw/X Y/} = ($X, $Y);
 
-	warn "\t" x $context->{LEVEL} . "rendering $self->{TAG} at $X,$Y"
+	warn ' ' x $context->{LEVEL} . "rendering $self->{TAG} at $X,$Y\n"
 		if $context->{DEBUG};
 }
 
@@ -97,6 +97,11 @@ sub postrender
 		warn "reset cursor set, resetting coords" if $context->{DEBUG};
 		@{$context}{qw/X Y/} = @{$self}{qw/OLD_X OLD_Y/};
 	}
+
+	my ($X, $Y) = @{$context}{qw/X Y/};
+
+	warn ' ' x $context->{LEVEL} . "rendered / $self->{TAG} to $X,$Y\n"
+		if $context->{DEBUG};
 }
 
 1;
