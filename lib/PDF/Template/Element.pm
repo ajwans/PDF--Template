@@ -45,9 +45,29 @@ sub render
 
     return 0 unless $self->should_render($context);
 
+	$self->prerender($context);
 	$self->_render($context);
+	$self->postrender($context);
 
 	return 1;
+}
+
+sub prerender
+{
+	my ($self, $context) = @_;
+
+	my ($X, $Y) = map { $context->get($self, $_) } qw/X Y/;
+	warn ' ' x $context->{LEVEL} . "rendering $self->{TAG} at $X,$Y\n"
+		if $context->{DEBUG};
+}
+
+sub postrender
+{
+	my ($self, $context) = @_;
+
+	my ($X, $Y) = map { $context->get($self, $_) } qw/X Y/;
+	warn ' ' x $context->{LEVEL} . "rendered / $self->{TAG} to $X,$Y\n"
+		if $context->{DEBUG};
 }
 
 1;
