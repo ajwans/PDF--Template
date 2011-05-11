@@ -11,6 +11,7 @@ use PDF::Writer;
 
 use File::Basename qw( fileparse );
 use XML::Parser ();
+use IO::String;
 
 #-----------------------------------------------
 # TODO
@@ -35,9 +36,12 @@ sub new {
     $self->_validate_option($_)
         for qw(OPENACTION OPENMODE);
 
-    if ( !defined $self->{FILE} && defined $self->{FILENAME} ) {
-        $self->{FILE} = $self->{FILENAME};
-    }
+	# FILENAME a synonym for FILE
+	$self->{FILE} //= $self->{FILENAME};
+
+	# Use XML scalar if available and FILE not already set
+	$self->{FILE} //= defined($self->{XML}) ?
+									IO::String->new($self->{XML}) : undef;
 
     $self->parse_xml($self->{FILE}) if defined $self->{FILE};
 
@@ -301,6 +305,12 @@ is present, C<parse()> will be called upon that filename/filehandle. Otherwise,
 after new() is called, you will have to call C<parse()> yourself.
 
 filename is a synonym for file.
+
+=item * xml
+
+This is similar to 'file' but takes a string containing the XML to
+be parsed instead of a file(name|handle), if either of file or filename are
+present this parameter will be ignored.
 
 =item * openaction
 
