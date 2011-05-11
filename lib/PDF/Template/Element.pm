@@ -14,6 +14,19 @@ sub set_color
 
     my $color = $context->get($self, $attr, $depth);
 
+	my %colormap = (
+		black	=> '0,0,0',
+		red		=> '255,0,0',
+		green	=> '0,255,0',
+		blue	=> '0,0,255',
+		yellow	=> '255,255,0',
+		purple	=> '255,0,255',
+		gray	=> '192,192,192',
+		white	=> '255,255,255',
+	);
+
+	$color = $colormap{$color} if ($color && exists($colormap{$color}));
+
     return 1 unless $color;
 
     my @colors = map { $_ / 255 } split /,\s*/, $color, 3;
