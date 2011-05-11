@@ -77,7 +77,7 @@ sub begin_page
     return 1;
 }
 
-sub render
+sub _render
 {
     my $self = shift;
     my ($context) = @_;

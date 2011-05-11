@@ -42,7 +42,7 @@ sub get_text
     return $txt;
 }
 
-sub render
+sub _render
 {
     my $self = shift;
     my ($context) = @_;

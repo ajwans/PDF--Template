@@ -26,7 +26,7 @@ sub reset
 
 sub trip { $_[0]{__TRIP_WIRE__} = $_[1] if defined $_[1]; $_[0]{__TRIP_WIRE__} }
 
-sub render
+sub _render
 {
    my $self = shift;
    my ($context) = @_;
