@@ -31,8 +31,6 @@ sub _render
    my $self = shift;
    my ($context) = @_;
 
-   return 0 unless $self->should_render($context);
-
    return 1 if $self->trip;
 
     # Regardless of whether a pagebreak actually occurs, this node

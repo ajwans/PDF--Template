@@ -49,8 +49,6 @@ sub _render
 
     delete $self->{TEMP_H} if exists $self->{TEMP_H};
 
-    return 0 unless $self->should_render($context);
-
     if ($context->{CALC_LAST_PAGE})
     {
         $self->{TEMP_H} = $self->calculate($context, 'H');
