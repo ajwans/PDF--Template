@@ -45,63 +45,9 @@ sub render
 
     return 0 unless $self->should_render($context);
 
-	$self->prerender($context);
 	$self->_render($context);
-	$self->postrender($context);
 
 	return 1;
-}
-
-sub prerender
-{
-	my ($self, $context) = @_;
-
-	my ($X, $Y) = map { $context->get($self, $_) } qw/X Y/;
-
-	# allow relative positioning of the cursor
-	given ($self->{Y}) {
-		when (undef) {
-		}
-
-		when (m/^-(\d+)/) {
-			$Y -= $1;
-		}
-
-		when (m/^[+](\d+)/) {
-			$Y += $1;
-		}
-
-		default {
-			$Y = $self->{Y};
-		}
-	}
-
-	# save for later in case this element should not move the cursor
-	@{$self}{qw/OLD_X OLD_Y/} = ($X, $Y);
-
-    my $p = $context->{PDF};
-	$p->move($X, $Y);
-	@{$context}{qw/X Y/} = ($X, $Y);
-
-	warn ' ' x $context->{LEVEL} . "rendering $self->{TAG} at $X,$Y\n"
-		if $context->{DEBUG};
-}
-
-sub postrender
-{
-	my ($self, $context) = @_;
-	my $reset_cursor = $self->{RESET_CURSOR};
-
-	# reset the X/Y coordinates if no_translate attribute is set
-	if ($reset_cursor) {
-		warn "reset cursor set, resetting coords" if $context->{DEBUG};
-		@{$context}{qw/X Y/} = @{$self}{qw/OLD_X OLD_Y/};
-	}
-
-	my ($X, $Y) = @{$context}{qw/X Y/};
-
-	warn ' ' x $context->{LEVEL} . "rendered / $self->{TAG} to $X,$Y\n"
-		if $context->{DEBUG};
 }
 
 1;

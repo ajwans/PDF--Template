@@ -149,6 +149,10 @@ sub enter_scope {
     my $self = shift;
     my ($obj) = @_;
 
+	warn ' ' x $self->{LEVEL} .
+					"rendering $obj->{TAG} at $self->{X},$self->{Y}\n"
+			if ($self->{DEBUG}); 
+
     push @{$self->{STACK}}, $obj;
 
     for my $key (qw(X Y)) {
@@ -163,10 +167,16 @@ sub exit_scope {
     my $self = shift;
     my ($obj, $no_delta) = @_;
 
+	$no_delta //= $obj->{RESET_CURSOR};
+
     unless ($no_delta) {
         my $deltas = $obj->deltas($self);
         $self->{$_} += $deltas->{$_} for keys %$deltas;
     }
+
+	warn ' ' x $self->{LEVEL} .
+					"rendered $obj->{TAG} at $self->{X},$self->{Y}\n"
+			if ($self->{DEBUG}); 
 
     pop @{$self->{STACK}};
 
