@@ -106,6 +106,7 @@ sub _render
 
         my ($w, $h) = map { $context->get($self, $_) } qw(W H);
 
+		$p->linewidth(0.2);
         $p->rect($x, $y, $w, $h);
         $p->stroke;
         $p->restore_state;

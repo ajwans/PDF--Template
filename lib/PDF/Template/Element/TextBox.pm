@@ -101,25 +101,61 @@ sub _render
 		warn ' ' x $context->{LEVEL} . "calc h " . $self->{TEMP_H} . "\n";
 	}
 
-    if ($context->get($self, 'BGCOLOR'))
-    {
-        $context->{PDF}->save_state;
+    my $p = $context->{PDF};
+    $p->save_state();
 
-        $self->set_color($context, 'BGCOLOR', 'fill');
+	my $border = $context->get($self, 'BORDER');
+    if ($border) {
+		$p->linewidth($border);
 
-        $context->{PDF}->rect($orig_x, $y - $self->{TEMP_H} + $h, $orig_w, $self->{TEMP_H});
-        $context->{PDF}->fill;
-        $context->{PDF}->restore_state;
+		if ($context->get($self, 'BORDER_COLOR')) {
+			$self->set_color($context, 'BORDER_COLOR', 'stroke');
+		}
+
+		my $radius = $context->get($self, 'RADIUS');
+		if ($radius) {
+			use constant SIN_45 => 0.707;
+			my $shorten = $radius * SIN_45;
+
+			# left side
+			$p->move($orig_x, $y + $shorten);
+			$p->line($orig_x, $y + $h - $shorten);
+
+			# arc the top left corner
+			$p->arc($orig_x + $shorten, $y + $h - $shorten, $shorten, $shorten, 180, 90, 0);
+
+			# top line
+			$p->line($orig_x + $orig_w - $shorten, $y + $h);
+
+			# arc the top right corner
+			$p->arc($orig_x + $orig_w - $shorten, $y + $h - $shorten, $shorten, $shorten, 90, 0);
+
+			# right side
+			$p->line($orig_x + $orig_w, $y + $shorten);
+
+			# arc the bottom right corner
+			$p->arc($orig_x + $orig_w - $shorten, $y + $shorten, $shorten, $shorten, 0, -90);
+
+			# bottom line
+			$p->line($orig_x + $shorten, $y);
+
+			# arc the bottom left corner
+			$p->arc($orig_x + $shorten, $y + $shorten, $shorten, $shorten, 270, 180);
+		} else {
+			$p->rect($orig_x, $y - $self->{TEMP_H} + $h, $orig_w,
+															$self->{TEMP_H});
+		}
+
+		if ($context->get($self, 'BGCOLOR')) {
+				$self->set_color($context, 'BGCOLOR', 'fill');
+				$p->fill_stroke();
+		} else {
+				$p->stroke();
+		}
+
     }
 
-    if ($context->get($self, 'BORDER'))
-    {
-
-        $context->{PDF}->rect($orig_x, $y - $self->{TEMP_H} + $h, $orig_w, $self->{TEMP_H});
-        $context->{PDF}->stroke;
-    }
-
-    $self->set_color($context, 'COLOR', 'both', 1);
+    $p->restore_state();
 
 	$context->{Y} = $y - $self->{TEMP_H};
 
