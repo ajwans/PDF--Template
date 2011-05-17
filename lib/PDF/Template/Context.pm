@@ -121,8 +121,8 @@ sub resolve {
 
     return $obj_val unless $op;
 
-    my $prev_val = $key eq 'X' || $key eq 'Y'
-        ? $self->{$key}
+    my $prev_val = $key =~ m/^(X)/ || $key =~ m/^(Y)/
+        ? $self->{$1}
         : $self->get($obj, $key, $depth + 1);
 
     return $obj_val unless defined $prev_val;
@@ -151,7 +151,7 @@ sub enter_scope {
 
     push @{$self->{STACK}}, $obj;
 
-    for my $key (qw(X Y)) {
+    for my $key (qw(X Y X1 X2 Y1 Y2)) {
         next unless exists $obj->{$key};
         $self->{$key} = $self->resolve($obj, $key);
     }
