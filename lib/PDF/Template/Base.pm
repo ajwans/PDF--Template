@@ -11,6 +11,7 @@ use PDF::Template::Constants qw(
 );
 
 use PDF::Template::Factory;
+use List::Util qw/min/;
 
 sub new
 {
@@ -142,20 +143,18 @@ sub end_page
 
 # draw a border
 # 
-# x,y+h         x+w,y+h
+# x,y         x+w,y
 # |------------|
 # |            |
 # |            |
 # |            |
 # |            |
 # |------------|
-# x,y			x+w,y
+# x,y-h			x+w,y-h
 
 sub draw_border
 {
 	my ($self, $context, $x, $y, $width, $height) = @_;
-	use Data::Dumper;
-	warn Dumper([$x, $y, $width, $height]);
 
     my $p = $context->{PDF};
     $p->save_state();
@@ -173,40 +172,39 @@ sub draw_border
 			use constant SIN_45 => 0.707;
 
 			# radius can't be more than half the height
-			$radius = min($radius, $height / 2);
+			$radius = min($radius, abs($height) / 2);
 
 			my $shorten = $radius * SIN_45;
 
 			# left side
-			$p->move($x, $y + $shorten);
-			$p->line($x, $y + $height - $shorten);
-
-			# arc the top left corner
-			$p->arc($x + $shorten, $y + $height - $shorten, $shorten, $shorten,
-																	180, 90, 0);
-
-			# top line
-			$p->line($x + $width - $shorten, $y + $height);
-
-			# arc the top right corner
-			$p->arc($x + $width - $shorten, $y + $height - $shorten, $shorten,
-															$shorten, 90, 0);
-
-			# right side
-			$p->line($x + $width, $y + $shorten);
-
-			# arc the bottom right corner
-			$p->arc($x + $width - $shorten, $y + $shorten, $shorten,
-															$shorten, 0, -90);
-
-			# bottom line
-			$p->line($x + $shorten, $y);
+			$p->move($x, $y - $shorten);
+			$p->line($x, $y - $height + $shorten);
 
 			# arc the bottom left corner
-			$p->arc($x + $shorten, $y + $shorten, $shorten, $shorten,
-																	270, 180);
+			$p->arc($x + $shorten, $y - $height + $shorten, $shorten, $shorten,
+																180, 270);
+
+			# bottom line
+			$p->line($x + $width - $shorten, $y - $height);
+
+			# arc the top right corner
+			$p->arc($x + $width - $shorten, $y - $height + $shorten, $shorten,
+														$shorten, -90, 0);
+
+			# right side
+			$p->line($x + $width, $y - $shorten);
+
+			# arc the top right corner
+			$p->arc($x + $width - $shorten, $y - $shorten, $shorten, $shorten,
+																	0, 90);
+
+			# top line
+			$p->line($x + $shorten, $y);
+
+			# arc the top left corner
+			$p->arc($x + $shorten, $y - $shorten, $shorten, $shorten, 90, 180);
 		} else {
-			$p->rect($x, $y, $width, $height);
+			$p->rect($x, $y, $width, -$height);
 		}
 
 		if ($context->get($self, 'BGCOLOR')) {

@@ -196,7 +196,7 @@ sub _show_boxed
     my $right = $x + $w;
     my $mid    = int(($x + $right) / 2);
 
-    my $current_y = $y + $h - $font_size;
+    my $current_y = $y - $font_size;
 
     foreach my $line_num (0 .. $num_lines - 1)
     {
@@ -204,25 +204,23 @@ sub _show_boxed
         $start_x = $right if $j eq 'right';
         $start_x = $mid if $j eq 'center';
 
-#       if ($str->length <= $chars_per_line)
         if (length($str) <= $chars_per_line)
         {
             return 0 if $m eq 'blind';
-            return $self->_display_doublebyte($p, $str, $start_x, $current_y, $j, $font_size);
+            return $self->_display_doublebyte($p, $str, $start_x, $current_y,
+															$j, $font_size);
         }
 
-#       my $str_this_line = $str->substr(0, $chars_per_line);
         my $str_this_line = substr($str, 0, $chars_per_line);
 
-        $self->_display_doublebyte($p, $str_this_line, $start_x, $current_y, $j, $font_size)
+        $self->_display_doublebyte($p, $str_this_line, $start_x, $current_y,
+															$j, $font_size)
             unless $m eq 'blind';
 
         $current_y -= $font_size;
-#       $str = $str->substr($chars_per_line);
         $str = substr($str, $chars_per_line);
     }
 
-#   return $str->length;
     return length($str);
 }
 

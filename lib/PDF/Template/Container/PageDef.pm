@@ -36,12 +36,12 @@ sub find_margin_heights
         if ($obj->isa('HEADER'))
         {
             die "Cannot have two <header> tags in the same <pagedef>", $/ if defined $header_height;
-            $header_height = $context->get($obj, 'HEADER_HEIGHT');
+            $header_height = $context->get($obj, 'H');
         }
         elsif ($obj->isa('FOOTER'))
         {
             die "Cannot have two <footer> tags in the same <pagedef>", $/ if defined $footer_height;
-            $footer_height = $context->get($obj, 'FOOTER_HEIGHT');
+            $footer_height = $context->get($obj, 'H');
         }
         else
         {

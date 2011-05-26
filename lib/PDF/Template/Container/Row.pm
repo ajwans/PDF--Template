@@ -2,6 +2,7 @@ package PDF::Template::Container::Row;
 
 use strict;
 use warnings;
+use Carp;
 
 use base 'PDF::Template::Container';
 
@@ -22,9 +23,11 @@ sub deltas
     my $self = shift;
     my ($context) = @_;
 
+	carp "row delta " . (-1 * $self->total_of($context, 'H'));
+
     return {
         X => $context->get($self, 'X') * -1 + $context->get($self, 'LEFT_MARGIN'),
-        Y => -1 * $self->max_of($context, 'H'),
+        Y => -1 * $self->total_of($context, 'H'),
     };
 }
 

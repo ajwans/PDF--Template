@@ -5,27 +5,20 @@ use warnings;
 
 use base 'PDF::Template::Container';
 
-sub prerender
-{
-	my ($self, $context) = @_;
-
-	$self->{orig_y} = $context->get($self, 'Y');
-	$self->{container_height} = 0;
-}
-
 sub postrender {
 	my ($self, $context) = @_;
 
 	my $y = $context->get($self, 'Y');
-	my $h = $self->{container_height};
+    my $h = $self->total_of($context, 'H');
 
-	$self->draw_border($context, 100, $y - $h, 100, $h);
+	$self->draw_border($context, 100, $y, 100, $h);
 }
 
 sub postchild {
 	my ($self, $context, $child) = @_;
 
-	$self->{container_height} += $child->deltas($context)->{Y};
+	# if there's a page break push it onto a list so that we can generate
+	# borders around cross page sections
 }
 
 1;
