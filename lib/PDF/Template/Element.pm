@@ -7,34 +7,6 @@ use 5.10.0;
 
 use base 'PDF::Template::Base';
 
-sub set_color
-{
-    my $self = shift;
-    my ($context, $attr, $mode, $depth) = @_;
-
-    my $color = $context->get($self, $attr, $depth);
-
-	my %colormap = (
-		black	=> '0,0,0',
-		red		=> '255,0,0',
-		green	=> '0,255,0',
-		blue	=> '0,0,255',
-		yellow	=> '255,255,0',
-		purple	=> '255,0,255',
-		gray	=> '192,192,192',
-		white	=> '255,255,255',
-	);
-
-	$color = $colormap{$color} if ($color && exists($colormap{$color}));
-
-    return 1 unless $color;
-
-    my @colors = map { $_ / 255 } split /,\s*/, $color, 3;
-    $context->{PDF}->color($mode, 'rgb', @colors);
-
-    return 1;
-}
-
 # default render does nothing
 sub _render
 {}

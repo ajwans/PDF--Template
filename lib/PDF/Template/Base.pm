@@ -140,5 +140,113 @@ sub end_page
     return 1;
 }
 
+# draw a border
+# 
+# x,y+h         x+w,y+h
+# |------------|
+# |            |
+# |            |
+# |            |
+# |            |
+# |------------|
+# x,y			x+w,y
+
+sub draw_border
+{
+	my ($self, $context, $x, $y, $width, $height) = @_;
+	use Data::Dumper;
+	warn Dumper([$x, $y, $width, $height]);
+
+    my $p = $context->{PDF};
+    $p->save_state();
+
+	my $border = $context->get($self, 'BORDER');
+    if ($border) {
+		$p->linewidth($border);
+
+		if ($context->get($self, 'BORDER_COLOR')) {
+			$self->set_color($context, 'BORDER_COLOR', 'stroke');
+		}
+
+		my $radius = $context->get($self, 'RADIUS');
+		if ($radius) {
+			use constant SIN_45 => 0.707;
+
+			# radius can't be more than half the height
+			$radius = min($radius, $height / 2);
+
+			my $shorten = $radius * SIN_45;
+
+			# left side
+			$p->move($x, $y + $shorten);
+			$p->line($x, $y + $height - $shorten);
+
+			# arc the top left corner
+			$p->arc($x + $shorten, $y + $height - $shorten, $shorten, $shorten,
+																	180, 90, 0);
+
+			# top line
+			$p->line($x + $width - $shorten, $y + $height);
+
+			# arc the top right corner
+			$p->arc($x + $width - $shorten, $y + $height - $shorten, $shorten,
+															$shorten, 90, 0);
+
+			# right side
+			$p->line($x + $width, $y + $shorten);
+
+			# arc the bottom right corner
+			$p->arc($x + $width - $shorten, $y + $shorten, $shorten,
+															$shorten, 0, -90);
+
+			# bottom line
+			$p->line($x + $shorten, $y);
+
+			# arc the bottom left corner
+			$p->arc($x + $shorten, $y + $shorten, $shorten, $shorten,
+																	270, 180);
+		} else {
+			$p->rect($x, $y, $width, $height);
+		}
+
+		if ($context->get($self, 'BGCOLOR')) {
+				$self->set_color($context, 'BGCOLOR', 'fill');
+				$p->fill_stroke();
+		} else {
+				$p->stroke();
+		}
+    }
+
+    $p->restore_state();
+}
+
+sub set_color
+{
+    my $self = shift;
+    my ($context, $attr, $mode, $depth) = @_;
+
+    my $color = $context->get($self, $attr, $depth);
+
+	my %colormap = (
+		black	=> '0,0,0',
+		red		=> '255,0,0',
+		green	=> '0,255,0',
+		blue	=> '0,0,255',
+		yellow	=> '255,255,0',
+		purple	=> '255,0,255',
+		gray	=> '192,192,192',
+		white	=> '255,255,255',
+	);
+
+	$color = $colormap{$color} if ($color && exists($colormap{$color}));
+
+    return 1 unless $color;
+
+    my @colors = map { $_ / 255 } split /,\s*/, $color, 3;
+    $context->{PDF}->color($mode, 'rgb', @colors);
+
+    return 1;
+}
+
 1;
 __END__

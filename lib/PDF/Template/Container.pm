@@ -97,6 +97,8 @@ sub iterate_over_children
 
         $e->exit_scope($context);
 
+		$self->postchild($context, $e);
+
 		last if (!$continue && $context->pagebreak_tripped());
     }
 
@@ -108,6 +110,12 @@ sub iterate_over_children
     return $continue;
 }
 
+sub postchild {}
+
+sub prerender {}
+
+sub postrender {}
+
 sub render
 {
     my $self = shift;
@@ -115,7 +123,13 @@ sub render
 
     return 0 unless $self->should_render($context);
 
-    return $self->iterate_over_children($context);
+	$self->prerender($context);
+
+	my $ret = $self->iterate_over_children($context);
+
+	$self->postrender($context);
+
+	return $ret;
 }
 
 sub max_of

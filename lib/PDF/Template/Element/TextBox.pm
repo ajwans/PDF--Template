@@ -7,6 +7,10 @@ use base 'PDF::Template::Element';
 
 use Encode;
 
+use Carp qw/cluck carp/;
+use Data::Dumper;
+use List::Util qw/min/;
+
 sub new
 {
     my $class = shift;
@@ -60,8 +64,11 @@ sub _render
     my $w = $context->get($self, 'W');
 
 	# if W is not specified then use the remaining space on the page
-	$w //= $context->get($self, 'PAGE_WIDTH') -
+	if (!defined($w)) {
+		$w = $context->get($self, 'PAGE_WIDTH') -
 									$context->get($self, 'RIGHT_MARGIN') - $x;
+		$context->{W} = $w;
+	}
 
     my $h = $context->get($self, 'H');
 
@@ -72,7 +79,7 @@ sub _render
 
     $self->set_color($context, 'COLOR', 'both');
 
-    my ($orig_x, $orig_w) = ($x, $w);
+    my ($orig_x, $orig_w, $orig_y) = ($x, $w, $y);
 
     if (defined(my $lmargin = $context->get($self, 'LMARGIN')))
     {
@@ -91,73 +98,25 @@ sub _render
 				"putting text '$txt' at X,Y,W,H => $x,$y,$w,$h\n"
 		if ($context->{DEBUG});
 
-    $self->{TEMP_H} = $self->show_boxed(
-        $context, $txt,
-        $x, $y, $w, $h,
-        $align, '',
-    );
+	$self->{TEMP_H} = $self->calculate($context, 'H');
+
+	my $valign = $context->get($self, 'VALIGN');
+	if (defined($valign) && $valign eq 'center') {
+		my $font_size = $context->{PDF}->font_size;
+		$y = ($y + $y - $h + $font_size) / 2;
+	}
+
+	if ($context->get($self, 'TEXT_COLOR')) {
+		$self->set_color($context, 'TEXT_COLOR', 'fill');
+	}
+    $self->show_boxed($context, $txt, $x, $y, $w, $h, $align, '');
+	$y = $orig_y;
 
 	if ($context->{DEBUG}) {
 		warn ' ' x $context->{LEVEL} . "calc h " . $self->{TEMP_H} . "\n";
 	}
 
-    my $p = $context->{PDF};
-    $p->save_state();
-
-	my $border = $context->get($self, 'BORDER');
-    if ($border) {
-		$p->linewidth($border);
-
-		if ($context->get($self, 'BORDER_COLOR')) {
-			$self->set_color($context, 'BORDER_COLOR', 'stroke');
-		}
-
-		my $radius = $context->get($self, 'RADIUS');
-		if ($radius) {
-			use constant SIN_45 => 0.707;
-			my $shorten = $radius * SIN_45;
-
-			# left side
-			$p->move($orig_x, $y + $shorten);
-			$p->line($orig_x, $y + $h - $shorten);
-
-			# arc the top left corner
-			$p->arc($orig_x + $shorten, $y + $h - $shorten, $shorten, $shorten, 180, 90, 0);
-
-			# top line
-			$p->line($orig_x + $orig_w - $shorten, $y + $h);
-
-			# arc the top right corner
-			$p->arc($orig_x + $orig_w - $shorten, $y + $h - $shorten, $shorten, $shorten, 90, 0);
-
-			# right side
-			$p->line($orig_x + $orig_w, $y + $shorten);
-
-			# arc the bottom right corner
-			$p->arc($orig_x + $orig_w - $shorten, $y + $shorten, $shorten, $shorten, 0, -90);
-
-			# bottom line
-			$p->line($orig_x + $shorten, $y);
-
-			# arc the bottom left corner
-			$p->arc($orig_x + $shorten, $y + $shorten, $shorten, $shorten, 270, 180);
-		} else {
-			$p->rect($orig_x, $y - $self->{TEMP_H} + $h, $orig_w,
-															$self->{TEMP_H});
-		}
-
-		if ($context->get($self, 'BGCOLOR')) {
-				$self->set_color($context, 'BGCOLOR', 'fill');
-				$p->fill_stroke();
-		} else {
-				$p->stroke();
-		}
-
-    }
-
-    $p->restore_state();
-
-	$context->{Y} = $y - $self->{TEMP_H};
+	$self->draw_border($context, $orig_x, $y, $orig_w, $h);
 
     return 1;
 }
@@ -174,7 +133,7 @@ sub deltas
 
     return {
         X => $dx,
-        Y => 0,
+        Y => $self->{TEMP_H},
     };
 }
 
@@ -270,13 +229,14 @@ sub _show_boxed
 sub show_boxed
 {
     my $self = shift;
-    my ($context, $str, $x, $y, $w, $h, $align, $mode) = @_;
+	my $context = shift;
+    my ($str, $x, $y, $w, $h, $align, $mode) = @_;
 
     my $fsize = $context->{PDF}->font_size;
     $fsize = 0 if $fsize < 0;
 
 #   return $h unless $str->length && ($fsize && $h / $fsize >= 1);
-    return $h unless length($str) && ($fsize && $h / $fsize >= 1);
+	return $h unless length($str) && ($fsize && $h / $fsize >= 1);
 
     my $total_h = $h;
 #   my $excess_txt = Unicode::String::utf8('');
@@ -298,7 +258,8 @@ sub show_boxed
         {
             last LOOP unless $excess_txt || $leftovers;
 
-            $str = ($leftovers ? substr($str, -1 * $leftovers) : '' ) . $excess_txt;
+            $str = ($leftovers ? substr($str, -1 * $leftovers) : '' ) .
+																	$excess_txt;
             $excess_txt = '';
 
             $str =~ s/^[\r\n\s]+//go;

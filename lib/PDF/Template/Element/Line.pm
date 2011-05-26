@@ -19,7 +19,8 @@ sub _render
 
     my $vals = $self->make_vals($context);
 
-	warn(sprintf("rendering line %d,%d -> %d,%d", @{$vals}{qw/X1 Y1 X2 Y2/}))
+	warn(sprintf(' ' x $context->{LEVEL} .
+			"rendering line %d,%d -> %d,%d", @{$vals}{qw/X1 Y1 X2 Y2/}))
 		if $context->{DEBUG};
 
     my $width = $context->get($self, 'WIDTH') || 1;
@@ -84,6 +85,7 @@ sub make_vals
             $y1 = $y2 = $context->get($self, 'Y');
         }
     }
+
     @vals{qw(Y1 Y2)} = ($y1, $y2);
 
     $self->{VALS} = \%vals;

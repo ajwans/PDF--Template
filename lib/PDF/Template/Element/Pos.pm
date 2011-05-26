@@ -14,6 +14,37 @@ sub new
     return $self;
 }
 
+sub prerender
+{
+	my ($self, $context) = @_;
+
+	$self->{orig_x} = $context->get($self, 'X');
+	$self->{orig_y} = $context->get($self, 'Y');
+
+	warn "X" . $self->{orig_x};
+	warn "Y" . $self->{orig_y};
+
+	warn "self Y " . $self->{Y};
+	warn "ctx Y " . $context->get($self, 'Y');
+
+	$self->SUPER::prerender($context);
+}
+
+sub deltas
+{
+	my ($self, $context) = @_;
+	my $x = $context->get($self, 'X');
+	my $y = $context->get($self, 'Y');
+
+# work out if this is absolute or relative then
+# find the deltas
+
+	return {
+		Y => $y - $self->{orig_y},
+		X => $x - $self->{orig_x},
+	};
+}
+
 1;
 __END__
 

@@ -22,6 +22,7 @@ BEGIN {
     'SECTION'     => 'PDF::Template::Container::Section',
     'HEADER'      => 'PDF::Template::Container::Header',
     'FOOTER'      => 'PDF::Template::Container::Footer',
+	'BOX'         => 'PDF::Template::Container::Box',
 
     'BOOKMARK'    => 'PDF::Template::Element::Bookmark',
     'CIRCLE'      => 'PDF::Template::Element::Circle',
@@ -52,6 +53,7 @@ BEGIN {
 %isBuildable = map { $_ => 1 } qw(
     ALWAYS
     BOOKMARK
+	BOX
     CIRCLE
     CONDITIONAL
 	DEBUG
