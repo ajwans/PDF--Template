@@ -22,6 +22,9 @@ sub new {
     $self->{PARAM_MAP} = [] unless UNIVERSAL::isa($self->{PARAM_MAP}, 'ARRAY');
     $self->{STACK}     = [] unless UNIVERSAL::isa($self->{STACK},     'ARRAY');
 
+	# for outputting indented debug statements
+	$self->{LEVEL}		= 0;
+
     $self->reset_pagebreak;
 
     return $self;

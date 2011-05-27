@@ -10,13 +10,8 @@ sub new
     my $class = shift;
     my $self = $class->SUPER::new(@_);
 
-    if (exists $self->{MAXITERS} && $self->{MAXITERS} < 1)
-    {
+    if (exists($self->{MAXITERS}) && $self->{MAXITERS} < 1) {
         die "<loop> MAXITERS must be greater than or equal to 1", $/;
-    }
-    else
-    {
-        $self->{MAXITERS} = 0;
     }
 
     return $self;
@@ -37,6 +32,11 @@ sub _do_page
         $self->SUPER::begin_page($context);
     }
     $iterator->exit_scope;
+
+	if ($self->{ITERATOR}) {
+		$iterator = $self->{ITERATOR};
+		$iterator->begin_page();
+	}
     return 1;
 }
 

@@ -18,19 +18,6 @@ sub enter_scope
     return 1;
 }
 
-sub deltas
-{
-    my $self = shift;
-    my ($context) = @_;
-
-	carp "row delta " . (-1 * $self->total_of($context, 'H'));
-
-    return {
-        X => $context->get($self, 'X') * -1 + $context->get($self, 'LEFT_MARGIN'),
-        Y => -1 * $self->total_of($context, 'H'),
-    };
-}
-
 sub total_of
 {
     my $self = shift;

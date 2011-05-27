@@ -110,7 +110,10 @@ sub begin_page
 
     $context->reset_pagebreak;
 
-    my $rc =  $self->SUPER::begin_page($context);
+    $context->{X} = $self->{LEFT_MARGIN};
+    $context->{Y} = $context->get($self, 'PAGE_HEIGHT');
+
+    my $rc = $self->SUPER::begin_page($context);
 
     $context->{X} = $self->{LEFT_MARGIN};
     $context->{Y} = $context->get($self, 'START_Y');

@@ -139,7 +139,8 @@ sub more_space
 		return 1;
 	}
 
-	warn "no more space Y,Y2 = " . $self->{CONTEXT}->get($self, 'Y') . ',' .
+	warn "no more space rendering $self->{TAG} Y,Y2 = " .
+				$self->{CONTEXT}->get($self, 'Y') . ',' .
 				$self->{CONTEXT}->get($self, 'Y2') if $self->{CONTEXT}->{DEBUG};
 
 	$self->{CONTEXT}->trip_pagebreak();
@@ -202,6 +203,11 @@ sub back_up
     $self->enter_scope;
 
     return 1;
+}
+
+sub begin_page {
+	my ($self, $context) = @_;
+	$self->{ITERS_THIS_PAGE} = 0;
 }
 
 sub reset

@@ -133,7 +133,7 @@ sub deltas
 
     return {
         X => $dx,
-        Y => $self->{TEMP_H},
+        Y => -$self->{TEMP_H},
     };
 }
 

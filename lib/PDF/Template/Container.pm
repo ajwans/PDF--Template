@@ -34,34 +34,8 @@ sub _do_page
 }
 
 sub begin_page { _do_page @_, 'begin_page' }
-#{
-#    my $self = shift;
-#    my ($context) = @_;
-#
-#    for my $e (@{$self->{ELEMENTS}})
-#    {
-#        $e->enter_scope($context);
-#        $e->begin_page($context);
-#        $e->exit_scope($context, 1);
-#    }
-#
-#    return 1;
-#}
 
 sub end_page { _do_page @_, 'end_page' }
-#{
-#    my $self = shift;
-#    my ($context) = @_;
-#
-#    for my $e (@{$self->{ELEMENTS}})
-#    {
-#        $e->enter_scope($context);
-#        $e->end_page($context);
-#        $e->exit_scope($context, 1);
-#    }
-#
-#    return 1;
-#}
 
 sub reset
 {
@@ -88,16 +62,17 @@ sub iterate_over_children
     {
         $e->enter_scope($context);
 
-        my $rc;
-        if ($rc = $e->render($context))
-        {
+        my $rc = $e->render($context);
+        if ($rc) {
             $e->mark_as_rendered;
         }
         $continue = $rc if $continue;
 
-        $e->exit_scope($context);
+		# no deltas for containers
+        $e->exit_scope($context, $e->isa('PDF::Template::Container') ? 1 : 0);
 
-		$self->postchild($context, $e);
+		warn ' ' x $context->{LEVEL} . "context Y now " . $context->{Y}
+			if ($context->{DEBUG});
 
 		last if (!$continue && $context->pagebreak_tripped());
     }
@@ -109,8 +84,6 @@ sub iterate_over_children
 
     return $continue;
 }
-
-sub postchild {}
 
 sub prerender {}
 
@@ -126,6 +99,8 @@ sub render
 	$self->prerender($context);
 
 	my $ret = $self->iterate_over_children($context);
+
+	warn "$self->{TAG} render $ret";
 
 	$self->postrender($context);
 
