@@ -3,9 +3,6 @@ package PDF::Template::Base;
 use strict;
 use warnings;
 
-BEGIN {
-}
-
 use PDF::Template::Constants qw(
     %Verify
 );
