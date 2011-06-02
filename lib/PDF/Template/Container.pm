@@ -100,8 +100,6 @@ sub render
 
 	my $ret = $self->iterate_over_children($context);
 
-	warn "$self->{TAG} render $ret";
-
 	$self->postrender($context);
 
 	return $ret;

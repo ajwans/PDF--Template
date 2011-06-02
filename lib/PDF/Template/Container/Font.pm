@@ -23,8 +23,7 @@ sub render
     my ($context) = @_;
     my $p = $context->{PDF};
 
-    my $size = $context->get($self, 'H') ||
-        $context->get($self, 'SIZE') ||
+    my $size = $context->get($self, 'SIZE') || $context->get($self, 'H') ||
         die "Height not set by the time <font> was rendered", $/;
     my $face = $context->get($self, 'FACE') ||
         die "Face not set by the time <font> was rendered", $/;
